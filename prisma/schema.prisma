@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Tag {
+  id              Int       @id @default(autoincrement())
+  name            String
+  textColor       String
+  backgroundColor String
+  emoji           String
+  Picture         Picture[]
+}
+
+model Location {
+  id         Int       @id @default(autoincrement())
+  name       String
+  flag       String
+  cover      String
+  Picture    Picture[]
+}
+
+model Picture {
+  id                 Int      @id @default(autoincrement())
+  filepath           String
+  place              String?
+  createdAt          DateTime
+  location           Location @relation(fields: [locationId], references: [id])
+  primaryTagID       Int?
+  tag                Tag[]
+  locationId         Int
+  size               Int?
+  description        String?
+}

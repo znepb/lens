@@ -1,0 +1,123 @@
+.tags {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.5rem;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  @media only screen and (max-width: 850px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.locations {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+
+  @media only screen and (max-width: 850px) {
+    grid-template-columns: 1fr;
+  }
+
+  & > div {
+    width: 1fr;
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+
+    & > article {
+      z-index: 100;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: white;
+      padding: 1rem;
+      height: 100%;
+      border-radius: 0.5rem;
+
+      background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.3) 100%
+      );
+
+      & > footer {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.8rem;
+      }
+    }
+
+    & > span {
+      z-index: 1;
+      border-radius: 0.5rem;
+    }
+  }
+}
+
+.pictures {
+  display: flex;
+  gap: 0.5rem;
+  flex-grow: 1;
+  width: calc(100vw - 5rem - 12px);
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  & > a {
+    position: relative;
+    display: inline;
+    width: inherit;
+    width: auto;
+    height: 20rem;
+    border-radius: 1rem;
+    color: inherit;
+  }
+
+  @media only screen and (max-width: 650px) {
+    flex-direction: column;
+    width: 100%;
+
+    padding-right: 1rem;
+
+    & > a {
+      height: auto;
+      & > div {
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+
+        & > footer {
+          bottom: 6px;
+        }
+      }
+    }
+  }
+}
+
+.seeMoreHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+
+  & > a {
+    font-size: 1rem;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &::after {
+      content: " »";
+    }
+  }
+}
