@@ -14,6 +14,7 @@ import { Tag, Location, Picture } from "../types";
 import { useState, useEffect } from "react";
 
 import Link from "next/link";
+import useWindowSize from "../UseWindowSize";
 
 export default function Index() {
   const [latestPhotos, setLatestPhotos] = useState<Picture[]>();
@@ -21,6 +22,7 @@ export default function Index() {
   const [tags, setTags] = useState<Tag[]>();
 
   const timeAgo = new TimeAgo("en-US");
+  const size = useWindowSize();
 
   useEffect(() => {
     const tagsPromise = fetch("/api/tags/all").then((res) =>
@@ -80,8 +82,15 @@ export default function Index() {
                 <div
                   key={idx}
                   style={{
-                    width: `${row.width * (384 / row.height)}px`,
-                    height: "384px",
+                    width: `${
+                      size.width < 768
+                        ? "calc(100% - 2rem);"
+                        : row.width * (384 / row.height)
+                    }px`,
+                    height:
+                      size.width < 768
+                        ? row.height * (384 / row.width)
+                        : "384px",
                     cursor: "pointer",
                   }}
                 >
@@ -89,8 +98,16 @@ export default function Index() {
                     <div>
                       <Image
                         src={`/photos/${row.filepath}`}
-                        width={row.width * (384 / row.height)}
-                        height={384}
+                        width={
+                          size.width < 768
+                            ? size.width - 32
+                            : row.width * (384 / row.height)
+                        }
+                        height={
+                          size.width < 768
+                            ? row.height * (384 / row.width)
+                            : 384
+                        }
                         key={idx}
                         layout={"fixed"}
                         className="shimmer"
@@ -166,8 +183,7 @@ export default function Index() {
                         <Image
                           src={`/photos/${locrow.cover}`}
                           objectFit="cover"
-                          width={"100%"}
-                          height={"100%"}
+                          width={size.width < 860 ? size.width : size.width / 3}
                           layout="fill"
                           className="shimmer"
                         />

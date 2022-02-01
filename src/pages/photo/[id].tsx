@@ -98,6 +98,7 @@ export default function Photo() {
                 ((size.width < 1050 ? 950 : size.width * 0.35) /
                   loadedPhoto.width)
               }
+              quality={100}
               className="shimmer"
             />
             <footer>

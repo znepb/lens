@@ -27,6 +27,15 @@ export default function Changes() {
           paddingBottom: "5rem",
         }}
       >
+        <h2>2.2.1</h2>
+        <div className="headingDecoration"></div>
+        <h3>
+          Jan 31 2022 ({timeAgo.format(new Date("Jan 31 2022 21:20:00"))})
+        </h3>
+        <ul>
+          <li>More optomizations</li>
+          <li>Recent images now works on mobile again</li>
+        </ul>
         <h2>2.2</h2>
         <div className="headingDecoration"></div>
         <h3>
