@@ -27,6 +27,20 @@ export default function Changes() {
           paddingBottom: "5rem",
         }}
       >
+        <h2>2.2</h2>
+        <div className="headingDecoration"></div>
+        <h3>
+          Jan 31 2022 ({timeAgo.format(new Date("Jan 31 2022 20:30:00"))})
+        </h3>
+        <ul>
+          <li>Made Next images actually work as Next images</li>
+          <li>Better loading times</li>
+          <li>Fancy shimmer effect on image loading</li>
+          <li>
+            Add noscript message
+            <noscript>. How are you seeing this right now?</noscript>
+          </li>
+        </ul>
         <h2>2.1</h2>
         <div className="headingDecoration"></div>
         <h3>Jan 3 2022 ({timeAgo.format(new Date("Jan 3 2022 15:30:00"))})</h3>

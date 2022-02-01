@@ -38,4 +38,6 @@ model Picture {
   locationId         Int
   size               Int?
   description        String?
+  width              Int
+  height             Int
 }

@@ -2,8 +2,12 @@ import styles from "../styles/Home.module.scss";
 import Image from "next/image";
 import Head from "next/head";
 
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+
 import Footer from "../components/Footer";
-import PictureCard from "../components/PictureCard";
+
+TimeAgo.addLocale(en);
 
 import { Tag, Location, Picture } from "../types";
 
@@ -15,6 +19,8 @@ export default function Index() {
   const [latestPhotos, setLatestPhotos] = useState<Picture[]>();
   const [locations, setLocations] = useState<Location[]>();
   const [tags, setTags] = useState<Tag[]>();
+
+  const timeAgo = new TimeAgo("en-US");
 
   useEffect(() => {
     const tagsPromise = fetch("/api/tags/all").then((res) =>
@@ -71,14 +77,64 @@ export default function Index() {
           {latestPhotos && locations && tags ? (
             <>
               {latestPhotos.map((row: Picture, idx: number) => (
-                <a href={`/photo/${row.id}`} key={idx}>
-                  <PictureCard
-                    locations={locations}
-                    tags={tags}
-                    data={row}
-                    key={idx}
-                  />
-                </a>
+                <div
+                  key={idx}
+                  style={{
+                    width: `${row.width * (384 / row.height)}px`,
+                    height: "384px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Link href={`/photo/${row.id}`}>
+                    <div>
+                      <Image
+                        src={`/photos/${row.filepath}`}
+                        width={row.width * (384 / row.height)}
+                        height={384}
+                        key={idx}
+                        layout={"fixed"}
+                        className="shimmer"
+                      />
+                      <footer>
+                        <span>
+                          {row.place}
+                          {row.place && ", "}
+                          {
+                            locations.filter((loc) => loc.id == row.location)[0]
+                              .name
+                          }
+                        </span>{" "}
+                        <small>
+                          <span
+                            title={`${new Date(
+                              Date.parse(row.taken)
+                            ).toLocaleDateString(undefined, {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                            })}`}
+                          >
+                            {timeAgo.format(Date.parse(row.taken))}
+                          </span>{" "}
+                          ·{" "}
+                          {tags.map((obj, idx) => {
+                            if (obj.id == row.primaryTag) {
+                              return (
+                                <>
+                                  <span>{obj.emoji}</span>{" "}
+                                  <span>{obj.name}</span>
+                                </>
+                              );
+                            }
+                          })}
+                        </small>
+                      </footer>
+                    </div>
+                  </Link>
+                </div>
               ))}
             </>
           ) : (
@@ -108,12 +164,12 @@ export default function Index() {
                         }}
                       >
                         <Image
-                          src={require(`../../public/photos/${locrow.cover}`)}
+                          src={`/photos/${locrow.cover}`}
                           objectFit="cover"
                           width={"100%"}
                           height={"100%"}
                           layout="fill"
-                          placeholder="blur"
+                          className="shimmer"
                         />
                         <article>
                           <header>

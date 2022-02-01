@@ -3,11 +3,6 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-interface orderByProps {
-  photoID?: string;
-  createdAt?: string;
-}
-
 export default (req: NextApiRequest, res: NextApiResponse) => {
   // using any here other react starting crying
   const defaultSort: any = {
@@ -50,6 +45,8 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
           ).map((obj) => obj.id),
           size: row.size,
           description: row.description,
+          width: row.width,
+          height: row.height,
         });
       }
 

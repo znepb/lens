@@ -2,6 +2,11 @@ import styles from "../../styles/Photo.module.scss";
 
 import Footer from "../../components/Footer";
 
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+
+TimeAgo.addLocale(en);
+
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -11,8 +16,10 @@ import Head from "next/head";
 
 import Image from "next/image";
 import { Tag as TagType } from "../../types";
+import useWindowSize from "../../UseWindowSize";
 
 export default function Photo() {
+  const timeAgo = new TimeAgo("en-US");
   const router = useRouter();
 
   const [errorMessage, setErrorMessage] = useState<any>();
@@ -21,6 +28,8 @@ export default function Photo() {
 
   const [moreOfTag, setMoreOfTag] = useState<any>();
   const [moreAt, setMoreAt] = useState<any>();
+
+  const size = useWindowSize();
 
   useEffect(() => {
     if (router.isReady) {
@@ -80,13 +89,17 @@ export default function Photo() {
       {loadedPhoto ? (
         <section className={styles.main}>
           <div className={styles.image}>
-            <div className="fiximage">
-              <Image
-                src={require(`../../../public/photos/${loadedPhoto.filepath}`)}
-                objectFit="contain"
-                width={800}
-              />
-            </div>
+            <Image
+              src={`/photos/${loadedPhoto.filepath}`}
+              width={size.width < 1050 ? 950 : size.width * 0.35}
+              layout={"intrinsic"}
+              height={
+                loadedPhoto.height *
+                ((size.width < 1050 ? 950 : size.width * 0.35) /
+                  loadedPhoto.width)
+              }
+              className="shimmer"
+            />
             <footer>
               <a
                 onClick={() => {
@@ -153,7 +166,8 @@ export default function Photo() {
                   day: "numeric",
                   hour: "2-digit",
                   minute: "2-digit",
-                })}
+                })}{" "}
+                ({timeAgo.format(Date.parse(loadedPhoto.taken))})
               </div>
             </div>
             <div className={styles.description}>{loadedPhoto.description}</div>
@@ -169,14 +183,14 @@ export default function Photo() {
                       moreOfTag.map((photo: any) => (
                         <a href={`/photo/${photo.id}`} key={photo.id}>
                           <div
-                            className="fiximage"
                             key={photo.filepath}
                             style={{ cursor: "pointer" }}
                           >
                             <Image
-                              src={require(`../../../public/photos/${photo.filepath}`)}
-                              width={720}
-                              objectFit="contain"
+                              className="shimmer"
+                              src={`/photos/${photo.filepath}`}
+                              width={photo.width * (600 / photo.height)}
+                              height={600}
                             />
                           </div>
                         </a>
@@ -203,14 +217,14 @@ export default function Photo() {
                       moreAt.map((photo: any) => (
                         <a href={`/photo/${photo.id}`} key={photo.id}>
                           <div
-                            className="fiximage"
                             key={photo.filepath}
                             style={{ cursor: "pointer" }}
                           >
                             <Image
-                              src={require(`../../../public/photos/${photo.filepath}`)}
-                              width={720}
-                              objectFit="contain"
+                              className="shimmer"
+                              src={`/photos/${photo.filepath}`}
+                              width={photo.width * (600 / photo.height)}
+                              height={600}
                             />
                           </div>
                         </a>

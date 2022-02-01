@@ -6,25 +6,8 @@
   height: 20rem;
   border-radius: 1rem;
 
-  & > span {
-    height: 100% !important;
-    width: inherit !important;
-  }
-
-  & > span > span {
-    display: none !important;
-    height: inherit !important;
-  }
-
   & > span > img {
-    min-width: 0 !important;
-    width: inherit !important;
-    height: inherit !important;
-    min-height: 0 !important;
-    max-width: none !important;
     border-radius: 1rem;
-    position: relative !important;
-    height: inherit !important;
   }
 
   & > footer {

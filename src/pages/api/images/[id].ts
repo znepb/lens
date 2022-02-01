@@ -40,6 +40,8 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
           }),
           size: row.size,
           description: row.description,
+          width: row.width,
+          height: row.height,
         });
       } else {
         res.status(404).json({

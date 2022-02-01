@@ -4,6 +4,7 @@ import CSS from "csstype";
 import styles from "../styles/PictureCard.module.scss";
 
 import { Picture, Tag, Location } from "../types";
+import { useRef } from "react";
 
 interface Props {
   data: Picture;
@@ -20,17 +21,20 @@ export default function PictureCard({ data, tags, locations, style }: Props) {
     return adjustedDate.toLocaleDateString();
   }
 
+  const ref = useRef<HTMLDivElement | null>(null);
+
   return (
     <div
       key={"picture-" + data.id}
       className={styles.picturecard}
       style={style}
+      ref={ref}
     >
       <Image
         src={require(`../../public/photos/${data.filepath}`)}
-        placeholder="blur"
-        objectFit="contain"
-        width={"500px"}
+        className="shimmer"
+        width={data.width}
+        height={384}
       />
       <footer>
         <span>

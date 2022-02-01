@@ -23,4 +23,6 @@ export interface Picture {
   location: number;
   tags: number[];
   primaryTag: number;
+  width: number;
+  height: number;
 }

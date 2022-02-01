@@ -6,6 +6,7 @@ import fs from "fs";
 import path from "path";
 import multer from "multer";
 import { parseBody } from "next/dist/server/api-utils";
+import imageSize from "image-size";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -20,6 +21,10 @@ const handeler = nextConnect<NextApiRequest, NextApiResponse>({}).post(
   (req, res) => {
     if (req.headers.authorization) {
       if (req.headers.authorization == `Bearer ${process.env.AUTH_TOKEN}`) {
+        const dimensions = imageSize(
+          path.join("./", "public", "photos", req.body.filepath)
+        );
+
         const picturePromise = prisma.picture.create({
           data: {
             filepath: req.body.filepath,
@@ -31,6 +36,14 @@ const handeler = nextConnect<NextApiRequest, NextApiResponse>({}).post(
             size: fs.statSync(
               path.join("./", "public", "photos", req.body.filepath)
             ).size,
+            width:
+              (dimensions.orientation == 1
+                ? dimensions.width
+                : dimensions.height) || 0,
+            height:
+              (dimensions.orientation == 1
+                ? dimensions.height
+                : dimensions.width) || 0,
           },
         });
 

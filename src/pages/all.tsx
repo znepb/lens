@@ -6,8 +6,9 @@ import Footer from "../components/Footer";
 
 import { Picture, Location, Tag } from "../types";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, createRef } from "react";
 import { useRouter } from "next/router";
+import useWindowSize from "../UseWindowSize";
 
 export default function Index() {
   const router = useRouter();
@@ -23,6 +24,12 @@ export default function Index() {
   const [locationFilter, setLocationFilter] = useState<number>(-1);
 
   const [sortBy, setSortBy] = useState<string>("desc");
+
+  const [columnWidth, setColumnWidth] = useState<number>(0);
+
+  const rowSizingRef = useRef<HTMLDivElement | null>(null);
+
+  const size = useWindowSize();
 
   useEffect(() => {
     fetch(`/api/images/all?skip=${index}&order=${sortBy}`).then((res) =>
@@ -81,6 +88,11 @@ export default function Index() {
       setTagFilter(Number(router.query.tag));
     }
   }, [router.isReady]);
+
+  useEffect(() => {
+    if (rowSizingRef.current?.offsetWidth)
+      setColumnWidth(rowSizingRef.current?.offsetWidth);
+  }, [size]);
 
   return (
     <>
@@ -150,6 +162,8 @@ export default function Index() {
           </div>
         </div>
         <div className={styles.pictures}>
+          <div ref={rowSizingRef}></div>
+
           {photos ? (
             photos.map((row: Picture, idx: number) => {
               if (row.location == locationFilter || locationFilter == -1) {
@@ -160,7 +174,6 @@ export default function Index() {
                   return (
                     <>
                       <a
-                        className="fiximage"
                         style={{
                           width: "100%",
                         }}
@@ -168,8 +181,14 @@ export default function Index() {
                         href={`/photo/${row.id}`}
                       >
                         <Image
-                          src={require(`../../public/photos/${row.filepath}`)}
-                          width="500px"
+                          src={`/photos/${row.filepath}`}
+                          width={columnWidth}
+                          height={
+                            columnWidth
+                              ? row.height * (columnWidth / row.width)
+                              : 0
+                          }
+                          className="shimmer"
                         />
                         <div>
                           <header>{row.place}</header>
@@ -192,6 +211,8 @@ export default function Index() {
               <div />
             </div>
           )}
+
+          {/* invisible reference object for column sizing */}
         </div>
         {photos && !reachedEnd && (
           <>
