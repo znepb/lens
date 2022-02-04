@@ -26,3 +26,11 @@ export interface Picture {
   width: number;
   height: number;
 }
+
+export interface Patch {
+  version: number[];
+  suffix?: string;
+  date: string;
+  time: string;
+  notes: string[];
+}

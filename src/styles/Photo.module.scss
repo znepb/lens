@@ -47,14 +47,28 @@
   gap: 0.8rem;
   column-gap: 1.2rem;
   grid-template-areas:
-    ". ."
-    ". .";
+    "1fr 1fr"
+    "1fr 1fr";
 
   & > div {
     display: flex;
     gap: 0.5rem;
     align-items: center;
     font-weight: bold;
+  }
+
+  & > .date {
+    grid-column: 1 / 3;
+  }
+
+  @media only screen and (max-width: 620px) {
+    grid-template-areas: initial;
+    grid-template-rows: ". . .";
+    grid-template-columns: 1fr;
+
+    & > .date {
+      grid-column: initial;
+    }
   }
 }
 
@@ -88,6 +102,14 @@
   gap: 1rem;
   flex-wrap: nowrap;
   width: auto;
+
+  @media only screen and (max-width: 620px) {
+    flex-direction: column;
+
+    & > a {
+      width: 100%;
+    }
+  }
 
   & > a > div > span {
     border-radius: 1rem;

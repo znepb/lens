@@ -159,7 +159,7 @@ export default function Photo() {
                   ))}
                 </div>
               </div>
-              <div>
+              <div className={styles.date}>
                 <Calendar />{" "}
                 {new Date(loadedPhoto.taken).toLocaleString(["en-US"], {
                   year: "numeric",
@@ -190,8 +190,16 @@ export default function Photo() {
                             <Image
                               className="shimmer"
                               src={`/photos/${photo.filepath}`}
-                              width={photo.width * (600 / photo.height)}
-                              height={600}
+                              width={
+                                size.width <= 620
+                                  ? size.width
+                                  : photo.width * (600 / photo.height)
+                              }
+                              height={
+                                size.width <= 620
+                                  ? photo.height * (size.width / photo.width)
+                                  : 600
+                              }
                             />
                           </div>
                         </a>
@@ -224,8 +232,16 @@ export default function Photo() {
                             <Image
                               className="shimmer"
                               src={`/photos/${photo.filepath}`}
-                              width={photo.width * (600 / photo.height)}
-                              height={600}
+                              width={
+                                size.width <= 620
+                                  ? size.width
+                                  : photo.width * (600 / photo.height)
+                              }
+                              height={
+                                size.width <= 620
+                                  ? photo.height * (size.width / photo.width)
+                                  : 600
+                              }
                             />
                           </div>
                         </a>

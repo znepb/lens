@@ -37,7 +37,9 @@ export default function Index() {
       })
     );
 
-    const photosPromise = fetch("/api/images/all").then((res) => res.json());
+    const photosPromise = fetch("/api/images/all?take=25").then((res) =>
+      res.json()
+    );
 
     Promise.all([tagsPromise, locationsPromise, photosPromise]).then(
       (results) => {

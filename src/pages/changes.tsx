@@ -4,6 +4,11 @@ import en from "javascript-time-ago/locale/en.json";
 import Footer from "../components/Footer";
 
 import Head from "next/head";
+import { useState } from "react";
+
+import changelog from "../json/changelog.json";
+
+import { Patch } from "../types";
 
 TimeAgo.addLocale(en);
 
@@ -13,58 +18,45 @@ export default function Changes() {
   return (
     <>
       <Head>
-        <title>Lens</title>
+        <title>Changes - Lens</title>
       </Head>
 
-      <section className="header">
-        <div> </div>
+      <section className="header" id="header">
+        <div></div>
         <h2>Changelog</h2>
         <div></div>
       </section>
       <section
         className="section"
+        id="changes"
         style={{
           paddingBottom: "5rem",
         }}
       >
-        <h2>2.2.1</h2>
-        <div className="headingDecoration"></div>
-        <h3>
-          Jan 31 2022 ({timeAgo.format(new Date("Jan 31 2022 21:20:00"))})
-        </h3>
-        <ul>
-          <li>More optomizations</li>
-          <li>Recent images now works on mobile again</li>
-        </ul>
-        <h2>2.2</h2>
-        <div className="headingDecoration"></div>
-        <h3>
-          Jan 31 2022 ({timeAgo.format(new Date("Jan 31 2022 20:30:00"))})
-        </h3>
-        <ul>
-          <li>Made Next images actually work as Next images</li>
-          <li>Better loading times</li>
-          <li>Fancy shimmer effect on image loading</li>
-          <li>
-            Add noscript message
-            <noscript>. How are you seeing this right now?</noscript>
-          </li>
-        </ul>
-        <h2>2.1</h2>
-        <div className="headingDecoration"></div>
-        <h3>Jan 3 2022 ({timeAgo.format(new Date("Jan 3 2022 15:30:00"))})</h3>
-        <ul>
-          <li>Happy new year</li>
-          <li>Bug fixes</li>
-        </ul>
-        <h2>2.0</h2>
-        <div className="headingDecoration"></div>
-        <h3>
-          Dec 25 2021 ({timeAgo.format(new Date("Dec 25 2021 12:00:00"))})
-        </h3>
-        <ul>
-          <li>lens.znepb.me release, replacing photos.znepb.me.</li>
-        </ul>
+        {changelog.map((change: Patch, index: number) => (
+          <section key={index}>
+            <h2>
+              {change.version.map((n: number, i: number) => {
+                if (i == change.version.length - 1) {
+                  return <span key={i}>{n}</span>;
+                } else {
+                  return <span key={i}>{n}.</span>;
+                }
+              })}
+              {change.suffix}
+            </h2>
+            <div className="headingDecoration"></div>
+            <h3>
+              {change.date} (
+              {timeAgo.format(new Date(`${change.date} ${change.time}`))})
+            </h3>
+            <ul>
+              {change.notes.map((note: string) => (
+                <li key={note}>{note}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </section>
       <Footer />
     </>

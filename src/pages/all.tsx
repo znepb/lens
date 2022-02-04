@@ -9,6 +9,7 @@ import { Picture, Location, Tag } from "../types";
 import { useState, useEffect, useRef, createRef } from "react";
 import { useRouter } from "next/router";
 import useWindowSize from "../UseWindowSize";
+import { render } from "sass";
 
 export default function Index() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function Index() {
       res.json().then((data) => {
         setPhotos([...photos, ...data]);
 
-        if (data.length < 25) {
+        if (data.length < 100) {
           setEnd(true);
         }
       })
@@ -45,12 +46,14 @@ export default function Index() {
 
   useEffect(() => {
     setIndex(0);
-    fetch(`/api/images/all?skip=${index}&order=${sortBy}`).then((res) =>
+    fetch(`/api/images/all?skip=0&order=${sortBy}`).then((res) =>
       res.json().then((data) => {
         setPhotos(data);
 
-        if (data.length < 25) {
+        if (data.length < 100) {
           setEnd(true);
+        } else {
+          setEnd(false);
         }
       })
     );
@@ -61,7 +64,7 @@ export default function Index() {
       res.json().then((data) => {
         setPhotos(data);
 
-        if (data.length < 25) {
+        if (data.length < 100) {
           setEnd(true);
         }
       })
@@ -226,7 +229,7 @@ export default function Index() {
             </div>
             <div
               onClick={() => {
-                setIndex(index + 25);
+                setIndex(index + 100);
               }}
               style={{
                 textAlign: "center",

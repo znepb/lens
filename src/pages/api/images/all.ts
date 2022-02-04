@@ -16,7 +16,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
   prisma.picture
     .findMany({
       skip: req.query.skip ? Math.max(Number(req.query.skip), 0) : 0,
-      take: req.query.take ? Math.min(Number(req.query.take), 25) : 25,
+      take: req.query.take ? Math.min(Number(req.query.take), 100) : 100,
       orderBy: [req.query.adminSort ? adminSort : defaultSort],
     })
     .then(async (rows) => {

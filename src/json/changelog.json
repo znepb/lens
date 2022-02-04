@@ -1,0 +1,42 @@
+[
+  {
+    "version": [2, 3],
+    "date": "Feb 3 2022",
+    "time": "00:00:00",
+    "notes": [
+      "API documentation",
+      "Add random image endpoint",
+      "Extend max amount of images on /images/all endpoint from 25 to 100",
+      "Fix more mobile CSS stuff"
+    ]
+  },
+  {
+    "version": [2, 2, 1],
+    "date": "Jan 31 2022",
+    "time": "21:20:00",
+    "notes": ["More optimizations", "Recent images now works on mobile again"]
+  },
+  {
+    "version": [2, 2],
+    "date": "Jan 31 2022",
+    "time": "20:30:00",
+    "notes": [
+      "Made Next images actually work as Next images",
+      "Better loading times",
+      "Fancy shimmer effect on image loading",
+      "Add noscript message"
+    ]
+  },
+  {
+    "version": [2, 1],
+    "date": "Jan 3 2022",
+    "time": "15:30:00",
+    "notes": ["Happy new year", "Bug fixes"]
+  },
+  {
+    "version": [2, 0],
+    "date": "Dec 25 2021",
+    "time": "12:00:00",
+    "notes": ["lens.znepb.me release, replacing photos.znepb.me."]
+  }
+]

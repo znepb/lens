@@ -1,7 +1,12 @@
 import styles from "../styles/Footer.module.scss";
 import Link from "next/link";
 
+import changelog from "../json/changelog.json";
+import { Patch } from "../types";
+
 export default function Footer() {
+  const latestVersion: Patch = changelog[0];
+
   return (
     <div className={styles.footer}>
       <span>
@@ -27,7 +32,19 @@ export default function Footer() {
       <footer>
         <span>
           <Link href="/changes">
-            <a className="nostyle">v2.2.1</a>
+            <Link href="/changes">
+              <a className="nostyle">
+                v
+                {latestVersion.version.map((n: number, i: number) => {
+                  if (i == latestVersion.version.length - 1) {
+                    return <span key={i}>{n}</span>;
+                  } else {
+                    return <span key={i}>{n}.</span>;
+                  }
+                })}
+                {latestVersion.suffix}
+              </a>
+            </Link>
           </Link>
         </span>
         <span>Copyright ©️ znepb 2022</span>
