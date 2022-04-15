@@ -3,11 +3,6 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-interface orderByProps {
-  photoID?: string;
-  createdAt?: string;
-}
-
 export default (req: NextApiRequest, res: NextApiResponse) => {
   prisma.picture
     .findUnique({
@@ -42,6 +37,9 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
           description: row.description,
           width: row.width,
           height: row.height,
+          lat: row.lat,
+          lon: row.lon,
+          lens: row.lens,
         });
       } else {
         res.status(404).json({

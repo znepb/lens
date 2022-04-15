@@ -1,4 +1,5 @@
 import "../styles/globals.scss";
+import "mapbox-gl/dist/mapbox-gl.css";
 import "bootstrap-grid-only-css/dist/css/bootstrap-grid.min.css";
 import type { AppProps } from "next/app";
 

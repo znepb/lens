@@ -47,6 +47,9 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
           description: row.description,
           width: row.width,
           height: row.height,
+          lat: row.lat,
+          lon: row.lon,
+          lens: row.lens,
         });
       }
 

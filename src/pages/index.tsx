@@ -5,21 +5,166 @@ import Head from "next/head";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 
+import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+
 import Footer from "../components/Footer";
 
 TimeAgo.addLocale(en);
 
 import { Tag, Location, Picture } from "../types";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import Link from "next/link";
 import useWindowSize from "../UseWindowSize";
+
+mapboxgl.accessToken = process.env.MAPBOX_TOKEN || "";
 
 export default function Index() {
   const [latestPhotos, setLatestPhotos] = useState<Picture[]>();
   const [locations, setLocations] = useState<Location[]>();
   const [tags, setTags] = useState<Tag[]>();
+
+  const mapContainer = useRef<any>();
+  const map = useRef<any>();
+
+  const [lat, setLat] = useState(35.77);
+  const [lon, setLon] = useState(-82.49);
+  const [zoom, setZoom] = useState(3);
+
+  useEffect(() => {
+    if (map.current) return; // initialize map only once
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/dark-v10",
+      center: [lon, lat],
+      zoom: zoom,
+    });
+
+    map.current.on("move", () => {
+      setLon(map.current.getCenter().lng.toFixed(4));
+      setLat(map.current.getCenter().lat.toFixed(4));
+      setZoom(map.current.getZoom().toFixed(2));
+    });
+
+    map.current.on("load", () => {
+      console.log("Loaded");
+      map.current.addSource("photos", {
+        type: "geojson",
+        data: "./api/images/pictures.geojson",
+      });
+
+      map.current.addLayer(
+        {
+          id: "photos-heat",
+          type: "heatmap",
+          source: "photos",
+          maxzoom: 15,
+          paint: {
+            // increase intensity as zoom level increases
+            "heatmap-intensity": {
+              stops: [
+                [11, 1],
+                [15, 3],
+              ],
+            },
+            // assign color values be applied to points depending on their density
+            "heatmap-color": [
+              "interpolate",
+              ["linear"],
+              ["heatmap-density"],
+              0,
+              "rgba(30,30,34,0)",
+              0.2,
+              "rgb(85,86,95)",
+              0.4,
+              "rgb(105,154,219)",
+              0.6,
+              "rgb(103,120,207)",
+              0.8,
+              "rgb(28,88,153)",
+            ],
+            // increase radius as zoom increases
+            "heatmap-radius": {
+              stops: [
+                [11, 15],
+                [15, 20],
+              ],
+            },
+            // decrease opacity to transition into the circle layer
+            "heatmap-opacity": {
+              default: 1,
+              stops: [
+                [14, 1],
+                [15, 0],
+              ],
+            },
+          },
+        },
+        "waterway-label"
+      );
+
+      map.current.addLayer(
+        {
+          id: "photos-point",
+          type: "circle",
+          source: "photos",
+          minzoom: 14,
+          paint: {
+            // increase the radius of the circle as the zoom level and dbh value increases
+            "circle-radius": {
+              property: "dbh",
+              type: "exponential",
+              stops: [
+                [{ zoom: 15, value: 1 }, 5],
+                [{ zoom: 15, value: 62 }, 10],
+                [{ zoom: 22, value: 1 }, 20],
+                [{ zoom: 22, value: 62 }, 50],
+              ],
+            },
+            "circle-color": "rgb(28,88,153)",
+            "circle-stroke-color": "white",
+            "circle-stroke-width": 1,
+            "circle-opacity": {
+              stops: [
+                [14, 0],
+                [15, 1],
+              ],
+            },
+          },
+        },
+        "waterway-label"
+      );
+    });
+
+    map.current.on("click", "photos-point", (event: any) => {
+      console.log(event.features);
+      new mapboxgl.Popup()
+        .setLngLat(event.features[0].geometry.coordinates)
+        .setHTML(
+          `<span style="color: black">
+            <strong>${
+              event.features[0].properties.place || "Unknown place"
+            }</strong> 
+            <br />
+            <strong>Taken:</strong> ${new Date(
+              event.features[0].properties.taken
+            ).toLocaleString(["en-US"], {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+            <br />
+            <strong>ID:</strong> ${event.features[0].properties.id}
+            <br />
+            <a href="/photo/${event.features[0].properties.id}">View</a>
+          </span>`
+        )
+        .addTo(map.current);
+    });
+  }, []);
 
   const timeAgo = new TimeAgo("en-US");
   const size = useWindowSize();
@@ -215,12 +360,7 @@ export default function Index() {
         </div>
       </section>
 
-      <section
-        className="section"
-        style={{
-          paddingBottom: "5rem",
-        }}
-      >
+      <section className="section">
         <h2>Tags</h2>
         <div className="headingDecoration" />
         <div className={styles.tags}>
@@ -250,6 +390,20 @@ export default function Index() {
               <div />
             </div>
           )}
+        </div>
+      </section>
+
+      <section
+        className="section"
+        style={{
+          paddingBottom: "5rem",
+        }}
+      >
+        <h2>Map</h2>
+        <div className="headingDecoration" />
+
+        <div>
+          <div ref={mapContainer} className={styles.mapContainer} />
         </div>
       </section>
 

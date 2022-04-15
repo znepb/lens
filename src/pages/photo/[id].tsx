@@ -10,7 +10,7 @@ TimeAgo.addLocale(en);
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { MapPin, Calendar, Tag } from "react-feather";
+import { MapPin, Calendar, Tag, Camera, Globe } from "react-feather";
 
 import Head from "next/head";
 
@@ -170,6 +170,11 @@ export default function Photo() {
                 })}{" "}
                 ({timeAgo.format(Date.parse(loadedPhoto.taken))})
               </div>
+              {loadedPhoto.lens && (
+                <div>
+                  <Camera /> {loadedPhoto.lens}
+                </div>
+              )}
             </div>
             <div className={styles.description}>{loadedPhoto.description}</div>
             <div className={styles.more}>
