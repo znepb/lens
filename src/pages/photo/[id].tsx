@@ -221,7 +221,7 @@ export default function Photo() {
                 </div>
               </div>
               <div>
-                <h2>More at {loadedPhoto.location.name}</h2>
+                <h2>More in {loadedPhoto.location.name}</h2>
                 <div className="headingDecoration"></div>
                 <div className={styles.moreImages}>
                   {typeof moreAt != "undefined" ? (

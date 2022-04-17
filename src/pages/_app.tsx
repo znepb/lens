@@ -1,11 +1,10 @@
 import "../styles/globals.scss";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "bootstrap-grid-only-css/dist/css/bootstrap-grid.min.css";
-import type { AppProps } from "next/app";
 
 import { AlertCircle } from "react-feather";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: any) {
   return (
     <>
       <noscript className="noscript">

@@ -1,5 +1,11 @@
 [
   {
+    "version": [2, 4, 1],
+    "date": "Apr 17 2022",
+    "time": "11:40:00",
+    "notes": ["Change text on photo page", "Update packages"]
+  },
+  {
     "version": [2, 4],
     "date": "Apr 15 2022",
     "time": "13:20:00",
@@ -7,17 +13,6 @@
       "Add geolocation info to photos",
       "Added map to home page",
       "Photos now have info on what device was used to take it"
-    ]
-  },
-  {
-    "version": [2, 3],
-    "date": "Feb 3 2022",
-    "time": "00:00:00",
-    "notes": [
-      "API documentation",
-      "Add random image endpoint",
-      "Extend max amount of images on /images/all endpoint from 25 to 100",
-      "Fix more mobile CSS stuff"
     ]
   },
   {
